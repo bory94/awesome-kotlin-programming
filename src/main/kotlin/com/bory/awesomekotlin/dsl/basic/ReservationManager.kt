@@ -3,17 +3,14 @@ package com.bory.awesomekotlin.dsl.basic
 import java.time.LocalDateTime
 
 class ReservationManager {
-    fun handlerReservationRequest(initialize: Reservation.() -> Unit) =
-        Reservation().apply {
-            initialize()
-            validateSelf()
-        }
+    fun handleRequest(initialize: ReservationDSL.() -> Unit) =
+        ReservationDSL().apply(initialize).toReservation().apply { validateSelf() }
 }
 
 fun main() {
     val manager = ReservationManager()
 
-    val reservation = manager.handlerReservationRequest {
+    val reservation = manager.handleRequest {
         reservationTime = LocalDateTime.of(2023, 10, 15, 22, 0, 0)
 
         customer {
