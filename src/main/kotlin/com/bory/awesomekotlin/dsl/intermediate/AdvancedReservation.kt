@@ -1,33 +1,37 @@
-package com.bory.awesomekotlin.dsl.basic
+package com.bory.awesomekotlin.dsl.intermediate
 
 import java.time.LocalDateTime
 import java.util.*
 
-data class Reservation(
+data class AdvancedReservation(
     val id: UUID,
     val reservationTime: LocalDateTime,
-    val customer: Customer
+    val advancedCustomer: AdvancedCustomer
 ) {
     fun validateSelf() {
         if (reservationTime < LocalDateTime.now()) throw IllegalArgumentException("Reservation Time should be after now")
-        this.customer.validateSelf()
+        this.advancedCustomer.validateSelf()
     }
 }
 
-data class ReservationDSL(
+data class AdvancedReservationDSL(
     val id: UUID = UUID.randomUUID(),
     var reservationTime: LocalDateTime = LocalDateTime.now(),
-    var customerDsl: CustomerDSL = CustomerDSL()
+    var advancedCustomerDsl: AdvancedCustomerDSL = AdvancedCustomerDSL()
 ) {
     fun toReservation() =
-        Reservation(id = id, reservationTime = reservationTime, customer = customerDsl.toCustomer())
+        AdvancedReservation(
+            id = id,
+            reservationTime = reservationTime,
+            advancedCustomer = advancedCustomerDsl.toCustomer()
+        )
 
-    fun customer(initialize: CustomerDSL.() -> Unit) {
-        this.customerDsl = CustomerDSL().apply(initialize)
+    fun customer(initialize: AdvancedCustomerDSL.() -> Unit) {
+        this.advancedCustomerDsl = AdvancedCustomerDSL().apply(initialize)
     }
 }
 
-data class Customer(
+data class AdvancedCustomer(
     val name: String,
     val numberOfAccompanies: Int
 ) {
@@ -37,9 +41,9 @@ data class Customer(
     }
 }
 
-data class CustomerDSL(
+data class AdvancedCustomerDSL(
     var name: String = "",
     var numberOfAccompanies: Int = 0
 ) {
-    fun toCustomer() = Customer(name = name, numberOfAccompanies = numberOfAccompanies)
+    fun toCustomer() = AdvancedCustomer(name = name, numberOfAccompanies = numberOfAccompanies)
 }

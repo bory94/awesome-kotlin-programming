@@ -1,10 +1,10 @@
-package com.bory.awesomekotlin.dsl.basic
+package com.bory.awesomekotlin.dsl.intermediate
 
 import java.time.LocalDateTime
 
 class ReservationManager {
-    infix fun reserve(initialize: ReservationDSL.() -> Unit) =
-        ReservationDSL().apply(initialize).toReservation().apply { validateSelf() }
+    infix fun reserve(initialize: AdvancedReservationDSL.() -> Unit) =
+        AdvancedReservationDSL().apply(initialize).toReservation().apply { validateSelf() }
 }
 
 fun main() {
