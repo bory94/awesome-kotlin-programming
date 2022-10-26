@@ -68,7 +68,7 @@ DTO 클래스는 일반적인 불변 DTO 클래스이며 모든 프러퍼티 값
 
 > IntermediateReservation 클래스의 프러퍼티로 IntermediateCustomer 클래스가 포함되어 있음을 주목해야 한다.
 
-이와는 반대로 DSL 클래스는 [Kotlin DSL Basics](../basic/README.md)에서 사용했던 DTO와 마찬가지로 모든 프러퍼티가 가편이고 기본값이 지정되어
+이와는 반대로 DSL 클래스는 [Kotlin DSL Basics](../basic/README.md)에서 사용했던 DTO와 마찬가지로 모든 프러퍼티가 가변이고 기본값이 지정되어
 있다.
 
 또, DSL 클래스에는 IntermediateCustomer 프러퍼티르 설정을 위한 customer 함수가 포함되어 있는데, 이 함수는
