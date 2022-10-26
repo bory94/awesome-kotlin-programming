@@ -11,7 +11,7 @@ data class SimpleReservation(
 ) {
     fun validateSelf() {
         if (customerName.isEmpty()) throw IllegalArgumentException("Name Cannot be Empty")
-        if (numberOfAccompanies < 0) throw IllegalArgumentException("Number of Accompanies should be positive")
+        if (numberOfAccompanies < 1) throw IllegalArgumentException("Number of Accompanies should be positive")
         if (reservationTime < LocalDateTime.now()) throw IllegalArgumentException("Reservation Time should be after now")
     }
 }
