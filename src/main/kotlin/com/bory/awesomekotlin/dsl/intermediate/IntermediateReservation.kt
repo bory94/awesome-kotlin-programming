@@ -26,7 +26,7 @@ data class IntermediateReservationDSL(
             intermediateCustomer = intermediateCustomerDsl.toCustomer()
         )
 
-    fun customer(initialize: IntermediateCustomerDSL.() -> Unit) {
+    inline fun customer(initialize: IntermediateCustomerDSL.() -> Unit) {
         this.intermediateCustomerDsl = IntermediateCustomerDSL().apply(initialize)
     }
 }
