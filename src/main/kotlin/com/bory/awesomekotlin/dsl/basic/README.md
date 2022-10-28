@@ -73,7 +73,7 @@ class SimpleReservationManager {
 
 reserve 함수를 통해 SimpleReservation 인스턴스를 생성할 수 있는데 이 함수의 매개변수를 주목할 필요가 있다.
 
-수신자 타입<sub>Receiver Type</sub> 함수는 확장 함수<sub>Extension Functino</sub>과 마찬가지로 함수 블럭 내에서 수신자 Type을
+수신자 타입<sub>Receiver Type</sub> 함수는 확장 함수<sub>Extension Function</sub>과 마찬가지로 함수 블럭 내에서 수신자 Type을
 this로 접근할 수 있다.
 
 또, reserve 함수 내부에서도 주목할 내용이 있는데, 여기서 SimpleReservation() 객체를 생성한 뒤 매개변수로 전달된 initialize 함수를 호출하고 있다.
