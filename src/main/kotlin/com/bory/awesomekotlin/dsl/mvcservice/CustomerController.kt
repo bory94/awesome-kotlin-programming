@@ -18,7 +18,9 @@ class CustomerController(
     @PostMapping
     fun insert(@Valid @RequestBody customerDto: CustomerDto) = customerService.insert(customerDto)
 
-
     @PutMapping
     fun update(@Valid @RequestBody customerDto: CustomerDto) = customerService.update(customerDto)
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable("id") id: Long): CustomerDto = customerService.delete(id)
 }
