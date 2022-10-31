@@ -45,7 +45,7 @@ class IdBasedService<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
 
         repository!!.delete(entity)
 
-        return (entity.newDto())
+        return entity.newDto()
     }
 
 }
