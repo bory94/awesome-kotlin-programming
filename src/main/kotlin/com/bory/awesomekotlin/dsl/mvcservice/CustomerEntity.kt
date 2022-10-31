@@ -10,8 +10,8 @@ class CustomerEntity(
     var age: Int = 0,
     createdAt: Instant? = Instant.now(),
     modifiedAt: Instant? = Instant.now()
-) : AbstractEntity(id, createdAt, modifiedAt) {
-    override fun toDto() =
+) : AbstractEntity<CustomerEntity, CustomerDto>(id, createdAt, modifiedAt) {
+    override fun newDto() =
         CustomerDto(
             id, name, age, createdAt!!, modifiedAt!!
         )

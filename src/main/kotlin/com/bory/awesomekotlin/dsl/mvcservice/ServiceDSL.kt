@@ -5,29 +5,27 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-@Suppress("UNCHECKED_CAST")
-class FindAllServiceDSL<E : AbstractEntity, D : AbstractDto>(
+class FindAllServiceDSL<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
     var pageable: Pageable? = null,
     var findAllAction: ((Pageable) -> Page<E>)? = null,
 ) {
     companion object {
-        fun <E : AbstractEntity, D : AbstractDto> findAll(initialize: FindAllServiceDSL<E, D>.() -> Unit): Page<D> =
+        fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> findAll(initialize: FindAllServiceDSL<E, D>.() -> Unit): Page<D> =
             FindAllServiceDSL<E, D>().apply { initialize() }.execute()
     }
 
-    fun execute(): Page<D> = findAllAction!!.invoke(pageable!!).map { it.toDto() as D }
+    fun execute(): Page<D> = findAllAction!!.invoke(pageable!!).map { it.newDto() }
 }
 
-@Suppress("UNCHECKED_CAST")
-class IdBasedService<E : AbstractEntity, D : AbstractDto>(
+class IdBasedService<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
     var id: Long? = null,
     var repository: JpaRepository<E, Long>? = null
 ) {
     companion object {
-        fun <E : AbstractEntity, D : AbstractDto> findById(initialize: IdBasedService<E, D>.() -> Unit): D =
+        fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> findById(initialize: IdBasedService<E, D>.() -> Unit): D =
             IdBasedService<E, D>().apply(initialize).findById()
 
-        fun <E : AbstractEntity, D : AbstractDto> delete(initialize: IdBasedService<E, D>.() -> Unit) =
+        fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> delete(initialize: IdBasedService<E, D>.() -> Unit) =
             IdBasedService<E, D>().apply(initialize).delete()
     }
 
@@ -36,7 +34,7 @@ class IdBasedService<E : AbstractEntity, D : AbstractDto>(
 
         return repository!!.findById(id!!)
             .orElseThrow { IllegalArgumentException("Data ID[$id] Not Found") }
-            .toDto() as D
+            .newDto()
     }
 
     fun delete(): D {
@@ -47,29 +45,28 @@ class IdBasedService<E : AbstractEntity, D : AbstractDto>(
 
         repository!!.delete(entity)
 
-        return (entity.toDto()) as D
+        return (entity.newDto())
     }
 
 }
 
-@Suppress("UNCHECKED_CAST")
-class SaveServiceDSL<E : AbstractEntity, D : AbstractDto>(
-    var dto: AbstractDto? = null,
+class SaveServiceDSL<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
+    var dto: AbstractDto<D, E>? = null,
     var findAction: ((Long) -> Optional<E>)? = null,
     var saveAction: ((E) -> E)? = null
 ) {
     companion object {
-        fun <E : AbstractEntity, D : AbstractDto> insert(initialize: SaveServiceDSL<E, D>.() -> Unit): D =
+        fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> insert(initialize: SaveServiceDSL<E, D>.() -> Unit): D =
             SaveServiceDSL<E, D>().apply(initialize).executeInsert()
 
-        fun <E : AbstractEntity, D : AbstractDto> update(initialize: SaveServiceDSL<E, D>.() -> Unit): D =
+        fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> update(initialize: SaveServiceDSL<E, D>.() -> Unit): D =
             SaveServiceDSL<E, D>().apply(initialize).executeUpdate()
     }
 
     fun executeInsert(): D {
         if (dto == null || saveAction == null) throw IllegalArgumentException()
 
-        return saveAction!!.invoke(dto!!.toEntity() as E).toDto() as D
+        return saveAction!!.invoke(dto!!.newEntity()).newDto()
     }
 
     fun executeUpdate(): D {
@@ -80,6 +77,6 @@ class SaveServiceDSL<E : AbstractEntity, D : AbstractDto>(
 
         dto!!.copyTo(entity)
 
-        return saveAction!!.invoke(entity).toDto() as D
+        return saveAction!!.invoke(entity).newDto()
     }
 }

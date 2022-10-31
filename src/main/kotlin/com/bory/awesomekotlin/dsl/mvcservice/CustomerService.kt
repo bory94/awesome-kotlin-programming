@@ -20,7 +20,7 @@ class CustomerService(
         findAllAction = customerRepository::findAll
     }
 
-    fun findById(findingId: Long): CustomerDto = findById<CustomerEntity, CustomerDto> {
+    fun findById(findingId: Long): CustomerDto = findById {
         id = findingId
         repository = customerRepository
     }
@@ -36,7 +36,7 @@ class CustomerService(
         saveAction = customerRepository::save
     }
 
-    fun delete(deletingId: Long): CustomerDto = delete<CustomerEntity, CustomerDto> {
+    fun delete(deletingId: Long): CustomerDto = delete {
         id = deletingId
         repository = customerRepository
     }

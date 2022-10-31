@@ -8,13 +8,9 @@ class CustomerDto(
     val age: Int = 0,
     createdAt: Instant = Instant.now(),
     modifiedAt: Instant = Instant.now()
-) : AbstractDto(id, createdAt, modifiedAt) {
-    override fun toEntity() = CustomerEntity(id, name, age, createdAt, modifiedAt)
-    override fun copyTo(entity: AbstractEntity) {
-        if (entity !is CustomerEntity) {
-            throw IllegalArgumentException("Entity is not a kind of Customer Entity")
-        }
-
+) : AbstractDto<CustomerDto, CustomerEntity>(id, createdAt, modifiedAt) {
+    override fun newEntity() = CustomerEntity(id, name, age, createdAt, modifiedAt)
+    override fun copyTo(entity: CustomerEntity) {
         entity.age = age
         entity.name = name
     }

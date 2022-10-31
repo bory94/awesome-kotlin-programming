@@ -10,7 +10,7 @@ import javax.persistence.*
 
 @MappedSuperclass
 @EntityListeners(value = [AuditingEntityListener::class])
-abstract class AbstractEntity(
+abstract class AbstractEntity<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
@@ -23,14 +23,13 @@ abstract class AbstractEntity(
     @Column(name = "modified_at")
     var modifiedAt: Instant? = null
 ) {
-
-    abstract fun toDto(): AbstractDto
+    abstract fun newDto(): D
 
     override fun equals(other: Any?): Boolean {
         other ?: return false
         if (this === other) return true
         if (javaClass != ProxyUtils.getUserClass(other)) return false
-        other as AbstractEntity
+        other as AbstractEntity<*, *>
 
         return if (null == this.id) false else this.id == other.id
     }
