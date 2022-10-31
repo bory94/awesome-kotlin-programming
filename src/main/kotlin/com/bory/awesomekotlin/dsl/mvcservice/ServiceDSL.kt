@@ -11,10 +11,14 @@ class FindAllServiceDSL<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
 ) {
     companion object {
         fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> findAll(initialize: FindAllServiceDSL<E, D>.() -> Unit): Page<D> =
-            FindAllServiceDSL<E, D>().apply { initialize() }.execute()
+            FindAllServiceDSL<E, D>().apply { initialize() }.findAll()
     }
 
-    fun execute(): Page<D> = findAllAction!!.invoke(pageable!!).map { it.newDto() }
+    fun findAll(): Page<D> {
+        if (pageable == null || findAllAction == null) throw IllegalArgumentException()
+
+        return findAllAction!!.invoke(pageable!!).map { it.newDto() }
+    }
 }
 
 class IdBasedService<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
@@ -57,19 +61,19 @@ class SaveServiceDSL<E : AbstractEntity<E, D>, D : AbstractDto<D, E>>(
 ) {
     companion object {
         fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> insert(initialize: SaveServiceDSL<E, D>.() -> Unit): D =
-            SaveServiceDSL<E, D>().apply(initialize).executeInsert()
+            SaveServiceDSL<E, D>().apply(initialize).insert()
 
         fun <E : AbstractEntity<E, D>, D : AbstractDto<D, E>> update(initialize: SaveServiceDSL<E, D>.() -> Unit): D =
-            SaveServiceDSL<E, D>().apply(initialize).executeUpdate()
+            SaveServiceDSL<E, D>().apply(initialize).update()
     }
 
-    fun executeInsert(): D {
+    fun insert(): D {
         if (dto == null || saveAction == null) throw IllegalArgumentException()
 
         return saveAction!!.invoke(dto!!.newEntity()).newDto()
     }
 
-    fun executeUpdate(): D {
+    fun update(): D {
         if (dto == null || findAction == null || saveAction == null) throw IllegalArgumentException()
 
         val entity = findAction!!.invoke(dto!!.id!!)
